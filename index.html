@@ -1,712 +1,463 @@
 <!DOCTYPE html>
+
 <html lang="th">
- <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width,initial-scale=1" name="viewport"/>
-  <title>
-   Maintenance Intelligence | PM Dashboard
-  </title>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js">
-  </script>
-  <style>
-   :root {
-    --navy:#0c2c52;
-    --blue:#1759b4;
-    --bg:#f5f7fb;
-    --line:#e7edf4;
-    --ink:#172c46;
-    --muted:#72839a;
-    --green:#16846a;
-    --red:#c45b59;
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Maintenance Intelligence | Executive Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+/* ==========================================================
+   MAINTENANCE INTELLIGENCE — EXECUTIVE EDITION
+   01  Design tokens
+   02  Global & navigation
+   03  Hero and controls
+   04  Month selector
+   05  KPI cards
+   06  Analytics panels
+   07  Charts & tables
+   08  Responsive layouts
+   ========================================================== */
+
+/* 01 — Design tokens */
+:root {
+  --navy: #142a48;
+  --navy-deep: #0b1c35;
+  --blue: #426ce2;
+  --blue-soft: #edf2ff;
+  --bg: #f3f6fb;
+  --surface: #ffffff;
+  --text: #192b44;
+  --muted: #8492a8;
+  --line: #e6ebf3;
+  --green: #10a88a;
+  --red: #e46c79;
+  --amber: #d99b40;
+  --shadow: 0 16px 44px rgba(19, 44, 80, .055);
 }
 
-* {
-    box-sizing:border-box;
-}
-
+/* 02 — Global & navigation */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
-    margin:0;
-    background:var(--bg);
-    font-family:system-ui,'Segoe UI',Tahoma,sans-serif;
-    color:var(--ink);
+  margin: 0;
+  background: radial-gradient(circle at 100% 0%, #eaf0ff 0, transparent 420px), var(--bg);
+  color: var(--text);
+  font: 17px/1.5 'DB Helvethaica X 67 MedCond', 'DB Helvethaica X', 'Segoe UI', Tahoma, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
-
+button, select, textarea { font: inherit; }
+button { cursor: pointer; transition: all .2s ease; }
 header {
-    background:#fff;
-    border-bottom:1px solid var(--line);
-    padding:21px clamp(18px,4vw,64px);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
+  background: rgba(255,255,255,.94);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(18px);
 }
-
-header .brand {
-    font-size:21px;
-    font-weight:800;
-    letter-spacing:-.5px;
-    color:var(--navy);
+.head {
+  max-width: 1550px;
+  margin: auto;
+  padding: 19px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
 }
-
-header .brand span {
-    display:inline-block;
-    background:var(--navy);
-    color:white;
-    padding:8px 11px;
-    border-radius:11px;
-    margin-right:12px;
+.logo { display: flex; align-items: center; gap: 14px; font-weight: 850; font-size: 19px; letter-spacing: -.6px; }
+.mark {
+  display: inline-grid;
+  place-items: center;
+  width: 43px;
+  height: 43px;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #244d92, #101f3a);
+  color: white;
+  box-shadow: 0 7px 16px #244d922e;
 }
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+.tag { font-size: 11px; letter-spacing: 2.1px; color: var(--blue); font-weight: 850; }
+main { max-width: 1550px; margin: auto; padding: 36px 36px 76px; }
+h1 { font-size: clamp(27px, 3vw, 37px); letter-spacing: -1.4px; line-height: 1.3; margin: 7px 0 8px; }
+h2 { font-size: 17px; letter-spacing: -.3px; margin: 0 0 5px; }
+p { margin: 0; color: var(--muted); }
 
-header small {
-    color:var(--muted);
+/* 03 — Hero and controls */
+.hero { display: flex; justify-content: space-between; align-items: end; gap: 20px; flex-wrap: wrap; margin-bottom: 26px; }
+.hero p { font-size: 14px; }
+select, .btn {
+  padding: 12px 17px;
+  background: white;
+  border: 1px solid #dfe6f1;
+  border-radius: 11px;
+  color: var(--navy);
+  font-weight: 750;
+  box-shadow: 0 2px 6px #102e4910;
 }
-
-main {
-    max-width:1480px;
-    margin:auto;
-    padding:34px 30px 60px;
-}
-
-.top {
-    display:flex;
-    justify-content:space-between;
-    gap:16px;
-    align-items:end;
-    margin-bottom:25px;
-    flex-wrap:wrap;
-}
-
-.eyebrow {
-    font-size:12px;
-    font-weight:800;
-    color:var(--blue);
-    letter-spacing:2px;
-}
-
-.top h1 {
-    font-size:30px;
-    letter-spacing:-1px;
-    margin:6px 0;
-}
-
-.sub {
-    color:var(--muted);
-    font-size:14px;
-}
-
-select,button,input {
-    font:inherit;
-}
-
-select {
-    border:1px solid var(--line);
-    padding:12px 16px;
-    border-radius:10px;
-    background:white;
-    color:var(--navy);
-    font-weight:700;
-    min-width:210px;
-}
-
-.grid {
-    display:grid;
-    gap:16px;
-}
-
-.kpis {
-    grid-template-columns:repeat(5,minmax(0,1fr));
-}
-
-.card,.panel {
-    background:white;
-    border:1px solid var(--line);
-    border-radius:16px;
-    box-shadow:0 5px 22px rgba(17,47,80,.035);
-}
-
-.card {
-    padding:23px 22px;
-}
-
-.card .label {
-    color:#6c7f94;
-    font-size:13px;
-    font-weight:650;
-}
-
-.card strong {
-    display:block;
-    font-size:35px;
-    margin:13px 0 6px;
-    color:var(--navy);
-    letter-spacing:-1px;
-}
-
-.card .hint {
-    font-size:12px;
-    color:#9aabc0;
-}
-
-.card.success strong {
-    color:var(--green);
-}
-
-.card.danger strong {
-    color:var(--red);
-}
-
-.panel {
-    padding:24px;
-}
-
-.panel h2 {
-    font-size:17px;
-    margin:0 0 5px;
-}
-
-.panel p {
-    font-size:12px;
-    color:var(--muted);
-    margin:0 0 20px;
-}
-
-.section {
-    margin:28px 0 13px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-}
-
-.section h2 {
-    font-size:17px;
-    margin:0;
-}
-
-.cols {
-    grid-template-columns:1.1fr .9fr;
-}
-
-.cols3 {
-    grid-template-columns:1fr 1fr 1fr;
-}
-
-.rowbar {
-    display:grid;
-    grid-template-columns:125px 1fr 54px;
-    gap:12px;
-    align-items:center;
-    margin:14px 0;
-    font-size:13px;
-}
-
-.track {
-    height:10px;
-    border-radius:20px;
-    background:#edf2f8;
-    overflow:hidden;
-}
-
-.fill {
-    height:100%;
-    border-radius:20px;
-    background:var(--blue);
-}
-
-.fill.green {
-    background:#27a88d;
-}
-
-.fill.red {
-    background:#e18177;
-}
-
-.fill.gray {
-    background:#a5b3c5;
-}
-
-.num {
-    text-align:right;
-    font-weight:800;
-    color:var(--navy);
-}
-
+select:focus, textarea:focus { outline: 3px solid #426ce22b; border-color: var(--blue); }
+.btn:hover, .month:hover { transform: translateY(-2px); }
+.btn.primary { background: var(--navy); border-color: var(--navy); color: white; }
+.btn.ghost { color: white; background: #ffffff13; border-color: #ffffff57; box-shadow: none; }
+.filter { min-width: 220px; }
 .upload {
-    padding:23px;
-    background:linear-gradient(110deg,#102e55,#164a85);
-    border-radius:16px;
-    color:white;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:20px;
-    flex-wrap:wrap;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(116deg, #0d203c 0%, #193b67 55%, #2a5a9c 100%);
+  border-radius: 22px;
+  padding: 30px 33px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  box-shadow: 0 17px 38px #163e7929;
 }
-
-.upload h2 {
-    font-size:18px;
-    margin:0 0 7px;
+.upload::after {
+  content: '';
+  position: absolute;
+  right: 18%;
+  top: -135px;
+  width: 340px;
+  height: 340px;
+  border: 1px solid #ffffff1b;
+  border-radius: 50%;
+  pointer-events: none;
+  box-shadow: 0 0 0 75px #ffffff06, 0 0 0 150px #ffffff05;
 }
+.upload > * { position: relative; z-index: 1; }
+.upload h2 { font-size: 20px; font-weight: 800; }
+.upload p { color: #b8cce6; margin-top: 4px; }
+.upload .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.upload .actions .btn:first-child { background: white; color: #14335b; border-color: white; }
 
-.upload p {
-    font-size:13px;
-    color:#c9d8eb;
-    margin:0;
-}
-
-.upload button {
-    background:white;
-    border:0;
-    border-radius:9px;
-    color:var(--navy);
-    font-weight:800;
-    padding:12px 20px;
-    cursor:pointer;
-}
-
-.upload button:hover {
-    background:#eaf3ff;
-}
-
-.upload button.secondary {
-    background:#ffffff20;
-    color:white;
-    border:1px solid #ffffff60;
-}
-
-.monthgrid {
-    display:grid;
-    grid-template-columns:repeat(12,minmax(0,1fr));
-    gap:8px;
-    margin:17px 0;
-}
-
+/* 04 — Month selector */
+.monthgrid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 9px; margin: 17px 0 29px; }
 .month {
-    border:1px dashed #cbd8e7;
-    background:white;
-    border-radius:10px;
-    padding:11px 3px;
-    text-align:center;
-    cursor:pointer;
-    min-height:68px;
+  padding: 13px 4px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  min-height: 75px;
+  text-align: center;
+  box-shadow: 0 3px 12px #1b3a5b05;
+}
+.month b { display: block; color: #273e5b; font-size: 13px; }
+.month small { display: block; color: #a0aec0; font-size: 10px; margin-top: 5px; }
+.month.loaded { background: #edfaf5; border-color: #a3dfca; }
+.month.loaded b, .month.loaded small { color: #16886e; }
+.month:focus-visible { outline: 3px solid #426ce255; }
+
+/* 05 — KPI cards */
+.kpis { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
+.card, .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 19px; box-shadow: var(--shadow); }
+.card {
+  min-width: 0;
+  padding: 24px 21px 22px;
+  position: relative;
+  overflow: hidden;
+  min-height: 151px;
+  transition: transform .2s, box-shadow .2s;
+}
+.card:hover { transform: translateY(-3px); box-shadow: 0 18px 34px #1d3a6413; }
+.card::before { content: ''; position: absolute; top: 0; left: 22px; right: 22px; height: 3px; border-radius: 0 0 6px 6px; background: #b8c6d9; }
+.card.green::before { background: var(--green); }
+.card.red::before { background: var(--red); }
+.card.blue::before { background: var(--blue); }
+.card .label { font-size: 12px; color: #7888a0; font-weight: 750; }
+.card strong { display: block; font-size: clamp(27px, 2.5vw, 36px); letter-spacing: -1.2px; line-height: 1.2; margin: 17px 0 11px; color: var(--navy); font-variant-numeric: tabular-nums; }
+.card small { color: #a0aec0; font-size: 11px; }
+.card.green strong { color: #0b9479; }
+.card.red strong { color: #cf5967; }
+.card.blue strong { color: #355fca; }
+
+/* 06 — Analytics panels */
+.section { display: flex; align-items: center; justify-content: space-between; margin: 37px 0 15px; }
+.section h2 { font-size: 18px; color: #1b304e; font-weight: 850; }
+.section::after { content: ''; height: 1px; flex: 1; background: #dfe6f0; margin-left: 20px; }
+.grid { display: grid; gap: 17px; }
+.cols3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.cols2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.panel { padding: 27px 27px 26px; min-width: 0; }
+.panel h2 { color: #1c3453; font-weight: 850; }
+.panel > p { font-size: 12px; margin-bottom: 22px; }
+
+/* 07 — Charts & tables */
+.barrow { display: grid; grid-template-columns: minmax(100px, 1fr) minmax(75px, 1.6fr) minmax(76px, auto); align-items: center; gap: 12px; margin: 15px 0; font-size: 12px; }
+.barrow .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #435875; font-weight: 650; }
+.track { height: 10px; border-radius: 30px; overflow: hidden; background: #edf1f7; display: flex; }
+.fill { height: 100%; border-radius: 30px; background: linear-gradient(90deg, #6a8cff, #3b66d9); }
+.fill.green { background: linear-gradient(90deg, #3bd1b3, #0da186); }
+.fill.red { background: linear-gradient(90deg, #f3a0a4, #e46c79); }
+.fill.gray { background: #aab7c9; }
+.number { text-align: right; font-weight: 850; color: #263d5a; font-size: 11px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.empty { text-align: center; color: #9eacc0; padding: 36px 10px; font-size: 13px; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; color: #6f8199; font-size: 12px; margin-top: 18px; }
+.dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; }
+.monthchart { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: end; gap: 10px; min-height: 268px; padding-top: 16px; }
+.monthcol { min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 9px; }
+.monthcol .value { font-size: 12px; color: #243b5a; font-weight: 850; }
+.monthcol .pct { font-size: 11px; color: #0d9c7e; font-weight: 850; }
+.monthcol .caption { color: #7e8da4; font-size: 11px; font-weight: 750; }
+.monthcol.unloaded { opacity: .30; }
+.stack { height: 160px; width: 100%; max-width: 43px; background: #f1f4f8; display: flex; flex-direction: column-reverse; overflow: hidden; border-radius: 9px 9px 4px 4px; }
+.stack .completed { background: linear-gradient(180deg, #36c9ad, #0d9c7e); }
+.stack .outstanding { background: linear-gradient(180deg, #f0a0a6, #df6571); }
+.tablewrap { max-height: 460px; overflow: auto; border: 1px solid #eef1f6; border-radius: 12px; }
+table { border-collapse: collapse; width: 100%; font-size: 12px; }
+th { background: #f6f8fc; color: #6f8199; text-align: left; font-size: 11px; position: sticky; top: 0; z-index: 1; }
+th, td { padding: 13px 12px; border-bottom: 1px solid #edf1f6; white-space: nowrap; }
+tbody tr:hover { background: #f7faff; }
+td.wrap { white-space: normal; min-width: 165px; }
+td.right, th.right { text-align: right; }
+.pill { display: inline-block; padding: 5px 10px; border-radius: 30px; font-weight: 750; font-size: 11px; color: #3d67b8; background: #edf3ff; }
+.pill.red { color: #bd5361; background: #fff0f2; }
+.rosterbox { margin-top: 16px; padding: 16px; border: 1px solid #e5ebf4; background: #f8faff; border-radius: 13px; }
+.rosterbox summary { cursor: pointer; font-weight: 750; color: #27436a; }
+textarea { width: 100%; min-height: 90px; padding: 11px; border: 1px solid #dce4ef; border-radius: 9px; resize: vertical; }
+.alert { display: none; padding: 13px 16px; border-radius: 11px; margin: 13px 0; background: #fff0f1; color: #b04454; }
+.footer { text-align: center; color: #9aa9bc; font-size: 11px; margin-top: 35px; letter-spacing: .6px; }
+
+/* 08 — Executive chart refinements */
+:root { --font-xs: 12px; --font-sm: 13px; --font-md: 14px; --font-lg: 18px; }
+body { font-size: var(--font-md); line-height: 1.6; }
+.card .label, .panel > p, .month small, .number, .legend, .small { font-size: var(--font-sm); }
+.card small, th { font-size: var(--font-xs); }
+.panel h2, .section h2 { font-size: var(--font-lg); }
+.panel { padding: 28px; }
+.panel > p { margin-bottom: 24px; }
+.metric-row { margin: 0 0 19px; }
+.metric-row:last-child { margin-bottom: 0; }
+.metric-head { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; margin-bottom: 9px; }
+.metric-name { min-width: 0; overflow-wrap: anywhere; font-size: var(--font-sm); font-weight: 700; color: #354b68; }
+.metric-stat { flex-shrink: 0; display: flex; align-items: baseline; gap: 12px; font-size: var(--font-sm); color: #263d5a; font-variant-numeric: tabular-nums; }
+.metric-stat b { font-weight: 850; }
+.metric-stat em { min-width: 58px; text-align: right; font-size: var(--font-sm); font-weight: 850; color: var(--blue); font-style: normal; }
+.track { height: 17px; width: 100%; border-radius: 20px; background: #e9eef6; overflow: hidden; }
+.fill { min-width: 0; border-radius: 20px; transition: width .3s ease; }
+.monthchart { gap: 11px; min-height: 340px; padding-top: 20px; }
+.monthcol { gap: 9px; }
+.month-value { font-size: var(--font-xs); color: #354b68; font-weight: 800; white-space: nowrap; }
+.month-rate { font-size: var(--font-sm); color: #0a9479; font-weight: 850; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.stack { height: 230px; width: 100%; max-width: 48px; position: relative; display: block; overflow: hidden; border-radius: 9px 9px 4px 4px; background: #e9eef5; }
+.stack .completed { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(180deg, #37cfaf, #07987e); }
+.stack .outstanding { position: absolute; top: 0; left: 0; right: 0; background: linear-gradient(180deg, #f5a8b0, #e56b79); }
+.monthcol.unloaded .stack { background: repeating-linear-gradient(135deg,#edf1f6 0,#edf1f6 8px,#f7f9fc 8px,#f7f9fc 16px); }
+.monthcol.unloaded { opacity: .48; }
+.monthcol .caption { font-size: var(--font-sm); }
+@media(max-width: 560px) { .metric-stat { gap: 7px; } .monthchart { overflow-x: auto; grid-template-columns: repeat(12,minmax(39px,1fr)); } .month-value { font-size: 10px; } .month-rate { font-size: 11px; } .monthcol .caption { font-size: 12px; } }
+
+/* 09 — Responsive layouts */
+@media (max-width: 1250px) {
+  .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .monthgrid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+@media (max-width: 850px) {
+  .cols3 { grid-template-columns: 1fr; }
+  .cols2 { grid-template-columns: 1fr; }
+  .head { padding: 15px 20px; }
+  main { padding: 24px 18px 54px; }
+}
+@media (max-width: 560px) {
+  .head .muted { display: none; }
+  .logo { font-size: 15px; }
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .card { padding: 19px 15px; min-height: 133px; }
+  .card strong { font-size: 28px; }
+  .upload { padding: 23px 20px; }
+  .monthgrid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .month { min-height: 67px; }
+  .panel { padding: 20px 16px; }
+  .barrow { grid-template-columns: 90px minmax(50px, 1fr) 76px; gap: 8px; }
+  .monthchart { gap: 3px; }
+  .monthcol .month-value, .monthcol .month-rate { font-size: 11px; }
+  .monthcol .caption { font-size: 12px; }
 }
 
-.month b {
-    display:block;
-    color:var(--navy);
-    font-size:13px;
-}
 
-.month small {
-    font-size:11px;
-    color:#9baac0;
-}
+/* 10 — Refined typography, consistent branch colors, and donut */
+:root { --mechanical:#3475db; --electrical:#f19a38; --other:#9aa9bc; }
+body { font-family:'DB Helvethaica X 67 MedCond','DB Helvethaica X','Segoe UI',Tahoma,sans-serif; }
+.monthgrid { gap:8px; }
+.month { padding:13px 2px; min-height:78px; }
+.month b { font-size:15px; white-space:nowrap; }
+.month small { font-size:13px; }
+.track { height:12px; border-radius:20px; }
+.metric-row { margin-bottom:16px; }
+.metric-head { margin-bottom:7px; }
+.fill.mechanical { background:var(--mechanical); }
+.fill.electrical { background:var(--electrical); }
+.fill.gray { background:var(--other); }
+.fill.yellow { background:#e8b83d; }
+#technicians .metric-row { margin-bottom:14px; }
+#technicians .metric-name { font-weight:650; }
+#technicians .track { height:11px; }
 
-.month.loaded {
-    border:1px solid #9bd7c4;
-    background:#f1fbf6;
-}
+.monthchart { min-height:275px; }
+.stack { height:172px; max-width:37px; }
+.monthcol { gap:7px; }
+.donut-layout { display:flex; align-items:center; justify-content:center; gap:30px; flex-wrap:wrap; padding:12px 0; }
+.donut { width:190px; height:190px; border-radius:50%; background:conic-gradient(var(--green) 0 var(--donut-rate),var(--red) var(--donut-rate) 100%); display:grid; place-items:center; flex:none; }
+.donut-center { width:138px; height:138px; background:#fff; border-radius:50%; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.donut-center strong { font-size:32px; line-height:1.15; color:var(--navy); }
+.donut-center span { font-size:13px; color:var(--muted); }
+.donut-details { display:grid; gap:18px; min-width:155px; }
+.donut-details>div { display:grid; grid-template-columns:1fr auto; column-gap:15px; align-items:center; }
+.donut-details span { grid-column:1/-1; font-size:14px; color:var(--muted); }
+.donut-details b { font-size:19px; color:var(--navy); }
+.donut-details em { font-size:15px; font-style:normal; font-weight:800; color:var(--muted); }
+@media(max-width:1400px){ .monthgrid { grid-template-columns:repeat(6,minmax(0,1fr)); } }
+@media(max-width:600px){ .monthgrid { grid-template-columns:repeat(3,minmax(0,1fr)); } .month b { font-size:14px; } .donut { width:164px;height:164px; } .donut-center { width:118px;height:118px; } }
 
-.month.loaded small {
-    color:#158265;
-}
-
-.month:hover {
-    border-color:var(--blue);
-}
-
-table {
-    border-collapse:collapse;
-    width:100%;
-    font-size:12px;
-}
-
-th {
-    text-align:left;
-    color:#6e8299;
-    font-size:11px;
-    background:#f5f8fc;
-    padding:12px 11px;
-    white-space:nowrap;
-}
-
-td {
-    padding:12px 11px;
-    border-bottom:1px solid #eef2f7;
-}
-
-tr:last-child td {
-    border-bottom:0;
-}
-
-.scroll {
-    max-height:390px;
-    overflow:auto;
-}
-
-.empty {
-    text-align:center;
-    color:#9aaabd;
-    padding:30px 8px;
-    font-size:13px;
-}
-
-.pill {
-    background:#fff1ef;
-    color:#ba5148;
-    padding:4px 9px;
-    border-radius:20px;
-    font-size:11px;
-    font-weight:750;
-}
-
-.note {
-    font-size:12px;
-    color:var(--muted);
-    line-height:1.7;
-    margin-top:17px;
-}
-
-.alert {
-    display:none;
-    margin-top:12px;
-    color:#8e2d2d;
-    background:#fff1f1;
-    border-radius:9px;
-    padding:12px;
-    font-size:13px;
-}
-
-.status {
-    display:inline-block;
-    margin-left:10px;
-    color:#bfd4ef;
-    font-size:12px;
-}
-
-.foot {
-    font-size:12px;
-    color:#92a0b1;
-    margin-top:30px;
-    text-align:center;
-}
-
-.kpis {
-    grid-template-columns:repeat(3,1fr);
-}
-
-.monthgrid {
-    grid-template-columns:repeat(6,1fr);
-}
-
-.cols3 {
-    grid-template-columns:1fr 1fr;
-}
-
-main {
-    padding:22px 14px;
-}
-
-.kpis {
-    grid-template-columns:repeat(2,1fr);
-}
-
-.cols,.cols3 {
-    grid-template-columns:1fr;
-}
-
-.monthgrid {
-    grid-template-columns:repeat(4,1fr);
-}
-
-.card strong {
-    font-size:29px;
-}
-
-.top h1 {
-    font-size:25px;
-}
-
-header small {
-    display:none;
-}
-
-.rowbar {
-    grid-template-columns:105px 1fr 42px;
-}
   </style>
- </head>
- <body>
-  <header>
-   <div class="brand">
-    <span>
-     ✦
-    </span>
-    MAINTENANCE
-    <span style="background:none;color:#91a5bd;padding:0;margin:0;font-weight:400">
-     / Intelligence
-    </span>
-   </div>
-   <small>
-    Preventive Maintenance · 2569
-   </small>
-  </header>
-  <main>
-   <div class="top">
-    <div>
-     <div class="eyebrow">
-      PERFORMANCE OVERVIEW
-     </div>
-     <h1>
-      ภาพรวมงานซ่อมบำรุง
-     </h1>
-     <div class="sub">
-      ติดตามสถานะ PM • วิเคราะห์งานค้าง • ผลงานผู้ดำเนินงาน
-     </div>
-    </div>
-    <select id="period">
-     <option value="all">
-      ภาพรวมทุกเดือน
-     </option>
-    </select>
-   </div>
-   <section class="upload">
-    <div>
-     <h2>
-      นำเข้าข้อมูล Excel รายเดือน
-      <span class="status" id="loadedCount">
-       0 / 12 เดือน
-      </span>
-     </h2>
-     <p>
-      เลือกเดือนด้านล่างเพื่ออัปโหลดแยกเดือน หรือเลือกหลายไฟล์พร้อมกัน • ข้อมูลประมวลผลในเบราว์เซอร์
-     </p>
-    </div>
-    <div>
-     <button onclick="document.getElementById('bulk').click()">
-      ＋ อัปโหลด Excel
-     </button>
-     <button class="secondary" onclick="clearAll()">
-      ล้างข้อมูล
-     </button>
-    </div>
-    <input accept=".xlsx,.xls" hidden="" id="bulk" multiple="" type="file"/>
-    <input accept=".xlsx,.xls" hidden="" id="single" type="file"/>
-   </section>
-   <div class="monthgrid" id="months">
-   </div>
-   <div class="alert" id="alert">
-   </div>
-   <div class="grid kpis">
-    <div class="card">
-     <div class="label">
-      งานทั้งหมด
-     </div>
-     <strong id="total">
-      —
-     </strong>
-     <div class="hint">
-      จำนวนรายการใบงาน
-     </div>
-    </div>
-    <div class="card success">
-     <div class="label">
-      งานเสร็จสิ้น
-     </div>
-     <strong id="done">
-      —
-     </strong>
-     <div class="hint">
-      สถานะ เสร็จสิ้น
-     </div>
-    </div>
-    <div class="card danger">
-     <div class="label">
-      งานไม่เสร็จ / คงค้าง
-     </div>
-     <strong id="pending">
-      —
-     </strong>
-     <div class="hint">
-      สถานะอื่นที่ไม่ใช่เสร็จสิ้น
-     </div>
-    </div>
-    <div class="card">
-     <div class="label">
-      อัตราปิดงาน
-     </div>
-     <strong id="rate">
-      —
-     </strong>
-     <div class="hint">
-      งานเสร็จ ÷ งานทั้งหมด
-     </div>
-    </div>
-    <div class="card">
-     <div class="label">
-      ผู้ดำเนินงานที่พบ
-     </div>
-     <strong id="workers">
-      —
-     </strong>
-     <div class="hint">
-      นับจาก Column AC
-     </div>
-    </div>
-   </div>
-   <div class="section">
-    <h2>
-     วิเคราะห์สาขางาน
-    </h2>
-   </div>
-   <div class="grid cols3">
-    <div class="panel">
-     <h2>
-      งานทั้งหมดตามสาขา
-     </h2>
-     <p>
-      ตรวจสอบคำลงท้ายจาก Column R
-     </p>
-     <div id="branchAll">
-     </div>
-    </div>
-    <div class="panel">
-     <h2>
-      งานค้างตามสาขา
-     </h2>
-     <p>
-      เครื่องกล / ไฟฟ้า / ไม่สามารถจำแนกได้
-     </p>
-     <div id="branchPending">
-     </div>
-    </div>
-    <div class="panel">
-     <h2>
-      สถานะการดำเนินงาน
-     </h2>
-     <p>
-      แยกตามสถานะจริงจาก Column AF
-     </p>
-     <div id="statuses">
-     </div>
-    </div>
-   </div>
-   <div class="section">
-    <h2>
-     วิเคราะห์ผลงานและแนวโน้ม
-    </h2>
-   </div>
-   <div class="grid cols">
-    <div class="panel">
-     <h2>
-      จำนวนงานที่ปิดโดยผู้ดำเนินงาน
-     </h2>
-     <p>
-      เรียงจากมากไปน้อย • นับเฉพาะงานเสร็จสิ้น • Column AC
-     </p>
-     <div id="technicians">
-     </div>
-    </div>
-    <div class="panel">
-     <h2>
-      เปรียบเทียบงานรายเดือน
-     </h2>
-     <p>
-      งานเสร็จและงานค้างในแต่ละเดือน
-     </p>
-     <div id="trend">
-     </div>
-    </div>
-   </div>
-   <div class="section">
-    <h2>
-     รายละเอียดสำหรับติดตาม
-    </h2>
-   </div>
-   <div class="grid cols">
-    <div class="panel">
-     <h2>
-      อันดับผู้ปิดงานทั้งหมด
-     </h2>
-     <p>
-      แสดงชื่อผู้ดำเนินงานและจำนวนงาน
-     </p>
-     <div class="scroll">
-      <table>
-       <thead>
-        <tr>
-         <th>
-          อันดับ
-         </th>
-         <th>
-          ผู้ดำเนินงาน (AC)
-         </th>
-         <th style="text-align:right">
-          งานเสร็จ
-         </th>
-        </tr>
-       </thead>
-       <tbody id="workerRows">
-       </tbody>
-      </table>
-     </div>
-    </div>
-    <div class="panel">
-     <h2>
-      รายการงานคงค้าง
-     </h2>
-     <p>
-      เลขที่ใบงาน / เครื่องจักร / สาขา / ผู้รับผิดชอบ
-     </p>
-     <div class="scroll">
-      <table>
-       <thead>
-        <tr>
-         <th>
-          เดือน
-         </th>
-         <th>
-          เลขที่งาน
-         </th>
-         <th>
-          เครื่องจักร
-         </th>
-         <th>
-          สาขา
-         </th>
-         <th>
-          ผู้รับผิดชอบ
-         </th>
-        </tr>
-       </thead>
-       <tbody id="pendingRows">
-       </tbody>
-      </table>
-     </div>
-    </div>
-   </div>
-   <div class="note">
-    หมายเหตุ: สาขาเครื่องกลตรวจจากข้อความท้ายรายการ เช่น [เครื่องกล] หรือ (เครื่องกล) และไฟฟ้าจาก EE ท้ายข้อความ; รายการอื่นจะแสดง “ไม่ระบุ” เพื่อไม่ให้ข้อมูลคลาดเคลื่อน • หากผู้ดำเนินงานใน AC มีหลายชื่อในช่องเดียว ระบบจะนับตามข้อความทั้งช่องเป็นหนึ่งกลุ่ม (ยังไม่แยกชื่อ) • ยอดรวมหลายเดือนเป็นยอดรวมรายการจากแต่ละไฟล์ ไม่ใช่การตัดรายการซ้ำข้ามเดือน
-   </div>
-   <div class="foot">
-    MAINTENANCE INTELLIGENCE • LOCAL EXCEL ANALYTICS • NO FILES UPLOADED TO SERVER
-   </div>
-  </main>
-  <script>
-   const months=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];const store={};let targetMonth=null;const $=id=>document.getElementById(id);const fmt=n=>Number(n).toLocaleString('th-TH');const clean=s=>String(s??'').trim();const esc=s=>clean(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-function branch(s){s=clean(s).replace(/\s+$/,'');if(/(?:\[เครื่องกล\]|\(เครื่องกล\))$/i.test(s))return 'เครื่องกล';if(/(?:^|[\s_\-])EE$/i.test(s))return 'ไฟฟ้า';return 'ไม่ระบุ'}
-function drawMonths(){let el=$('months');el.innerHTML=months.map((m,i)=>`<button class="month ${store[i+1]?'loaded':''}" onclick="pick(${i+1})"><b>${String(i+1).padStart(2,'0')} · ${m}</b><small>${store[i+1]?fmt(store[i+1].length)+' รายการ ✓':'เลือกไฟล์'}</small></button>`).join('');$('loadedCount').textContent=Object.keys(store).length+' / 12 เดือน';let v=$('period').value;$('period').innerHTML='<option value="all">ภาพรวมทุกเดือน</option>'+months.map((m,i)=>`<option value="${i+1}">${m} 2569 ${store[i+1]?'✓':''}</option>`).join('');$('period').value=v}
-function pick(m){targetMonth=m;$('single').click()}function alertMsg(msg){$('alert').textContent=msg;$('alert').style.display='block'}function clearAll(){if(!confirm('ล้างข้อมูลที่นำเข้าทั้งหมดในหน้านี้?'))return;Object.keys(store).forEach(k=>delete store[k]);$('period').value='all';drawMonths();render()}
-function getMonth(name){let m=name.match(/(?:^|[_\-\s])(?:2026[_\-])?(0?[1-9]|1[0-2])(?:\D|$)/);if(m)return +m[1];m=name.match(/2026[_\-](0?[1-9]|1[0-2])/);return m?+m[1]:null}
-async function parseFile(file,forced){if(!window.XLSX)throw Error('โหลดตัวอ่าน Excel ไม่สำเร็จ กรุณาเชื่อมต่ออินเทอร์เน็ตแล้วรีเฟรชหน้าเว็บ');const m=forced||getMonth(file.name);if(!m)throw Error('ไม่พบเลขเดือนในชื่อไฟล์ '+file.name+' กรุณากดเลือกช่องเดือน 01–12 แทน');const wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellDates:true});const sheet=wb.Sheets.Report||wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(sheet,{header:1,defval:''});if(rows.length<2)throw Error(file.name+' ไม่มีข้อมูล');const h=rows[0].map(clean);if(!clean(h[31]).includes('สถานะ')||!clean(h[28]).includes('ผู้ดำเนิน'))throw Error(file.name+' รูปแบบคอลัมน์ไม่ตรง (ต้องมี AC ผู้ดำเนินการ และ AF สถานะ)');store[m]=rows.slice(1).filter(r=>clean(r[1])||clean(r[0])).map(r=>({month:m,id:clean(r[1]),machine:clean(r[4]),location:clean(r[10]),description:clean(r[17]),branch:branch(r[17]),person:clean(r[28]),assigned:clean(r[27]),status:clean(r[31])||'ไม่ระบุสถานะ'}));}
-async function loadFiles(files,forced){$('alert').style.display='none';let errors=[];for(const f of files){try{await parseFile(f,forced)}catch(e){errors.push(e.message)}}if(errors.length)alertMsg(errors.join(' | '));drawMonths();render()}
-$('bulk').addEventListener('change',e=>{loadFiles([...e.target.files]);e.target.value=''});$('single').addEventListener('change',e=>{loadFiles([...e.target.files],targetMonth);e.target.value='';targetMonth=null});$('period').addEventListener('change',render);
-function counts(rows,key){let d={};rows.forEach(r=>d[r[key]]=(d[r[key]]||0)+1);return Object.entries(d).sort((a,b)=>b[1]-a[1])}function bars(id,items,color,maxItems=30){const el=$(id);if(!items.length){el.innerHTML='<div class="empty">ยังไม่มีข้อมูล • กรุณาอัปโหลด Excel</div>';return}const max=Math.max(1,...items.map(x=>x[1]));el.innerHTML=items.slice(0,maxItems).map(([name,n],i)=>`<div class="rowbar"><span title="${esc(name)}">${esc(name.length>20?name.slice(0,18)+'…':name)}</span><div class="track"><div class="fill ${color==='mixed'?(i===0?'red':i===1?'green':'gray'):color}" style="width:${100*n/max}%"></div></div><span class="num">${fmt(n)}</span></div>`).join('')}
-function render(){const period=$('period').value;let rows=Object.values(store).flat().filter(r=>period==='all'||r.month===+period);const done=rows.filter(r=>r.status==='เสร็จสิ้น');const pending=rows.filter(r=>r.status!=='เสร็จสิ้น');const people=counts(done.filter(r=>r.person), 'person');$('total').textContent=rows.length?fmt(rows.length):'—';$('done').textContent=rows.length?fmt(done.length):'—';$('pending').textContent=rows.length?fmt(pending.length):'—';$('rate').textContent=rows.length?(100*done.length/rows.length).toFixed(1)+'%':'—';$('workers').textContent=rows.length?fmt(new Set(rows.map(r=>r.person).filter(Boolean)).size):'—';
-const branchNames=['เครื่องกล','ไฟฟ้า','ไม่ระบุ'];function ordered(rs){const d=Object.fromEntries(counts(rs,'branch'));return branchNames.map(k=>[k,d[k]||0])}bars('branchAll',rows.length?ordered(rows):[],'');bars('branchPending',rows.length?ordered(pending):[],'mixed');bars('statuses',counts(rows,'status'),'');bars('technicians',people,'green',12);
-let trend=months.map((m,i)=>{let rr=Object.values(store[i+1]||[]);return [String(i+1).padStart(2,'0')+' '+m.slice(0,3),rr.filter(r=>r.status==='เสร็จสิ้น').length,rr.filter(r=>r.status!=='เสร็จสิ้น').length]}).filter((r,i)=>store[i+1]);const max=Math.max(1,...trend.map(r=>r[1]+r[2]));$('trend').innerHTML=trend.length?trend.map(([m,d,p])=>`<div class="rowbar"><span>${esc(m)}</span><div class="track" style="display:flex"><div class="fill green" style="width:${d/max*100}%;border-radius:0"></div><div class="fill red" style="width:${p/max*100}%;border-radius:0"></div></div><span class="num">${fmt(d+p)}</span></div>`).join('')+'<div class="note">🟢 งานเสร็จ &nbsp; 🔴 งานค้าง</div>':'<div class="empty">ยังไม่มีข้อมูลรายเดือน</div>';
-$('workerRows').innerHTML=people.length?people.map(([name,n],i)=>`<tr><td>${i+1}</td><td>${esc(name)}</td><td style="text-align:right;font-weight:800">${fmt(n)}</td></tr>`).join(''):'<tr><td colspan="3" class="empty">ยังไม่มีข้อมูล</td></tr>';
-$('pendingRows').innerHTML=pending.length?pending.slice(0,500).map(r=>`<tr><td>${String(r.month).padStart(2,'0')}</td><td>${esc(r.id)}</td><td title="${esc(r.location)}">${esc(r.machine||r.description)}</td><td><span class="pill">${esc(r.branch)}</span></td><td>${esc(r.assigned||'—')}</td></tr>`).join(''):'<tr><td colspan="5" class="empty">ไม่มีรายการงานค้าง หรือยังไม่อัปโหลดข้อมูล</td></tr>'}
-drawMonths();render();
+</head>
+<body>
+<header><div class="head"><div class="logo"><span class="mark">✦</span><span>MAINTENANCE <span style="font-weight:400;color:#90a1b8">/ Intelligence</span></span></div><div class="muted small">EXECUTIVE PERFORMANCE · 2569</div></div></header>
+<main>
+<div class="hero"><div><div class="tag">EXECUTIVE OVERVIEW</div><h1>Maintenance Performance <span style="color:var(--blue)">Dashboard</span></h1><p>ภาพรวมงานซ่อมบำรุง · ผลงานทีมช่าง · ติดตามงานคงค้าง</p></div><select class="filter" id="period"><option value="all">ภาพรวมทุกเดือน</option></select></div>
+<section class="upload"><div><h2>นำเข้าข้อมูล Excel รายเดือน <span id="loadedCount" style="font-size:12px;color:#a7c6ed;margin-left:8px">0 / 12 เดือน</span></h2><p>เลือกไฟล์ PM_2026_01–12.xlsx หรือคลิกเดือนด้านล่าง</p></div><div class="actions"><button class="btn" id="uploadBtn">＋ อัปโหลด Excel</button><button class="btn ghost" id="clearBtn">ล้างข้อมูล</button></div><input accept=".xlsx,.xls" hidden="" id="bulk" multiple="" type="file"/><input accept=".xlsx,.xls" hidden="" id="single" type="file"/></section>
+<div class="monthgrid" id="months"></div><div class="alert" id="alert"></div>
+<section class="kpis"><div class="card"><div class="label">งานทั้งหมด</div><strong id="total">—</strong><small>ใบงานที่นำเข้า</small></div><div class="card green"><div class="label">งานเสร็จสิ้น</div><strong id="done">—</strong><small>ปิดงานแล้ว</small></div><div class="card red"><div class="label">งานคงค้าง</div><strong id="pending">—</strong><small>ยังไม่เสร็จสิ้น</small></div><div class="card blue"><div class="label">อัตราปิดงาน</div><strong id="rate">—</strong><small>งานเสร็จ / งานทั้งหมด</small></div><div class="card"><div class="label">งานเครื่องกล</div><strong id="mechanical">—</strong><small>จำแนกจากรายละเอียดงาน</small></div><div class="card"><div class="label">งานไฟฟ้า</div><strong id="electrical">—</strong><small>จำแนกจากรายละเอียดงาน</small></div></section>
+<div class="section"><h2>วิเคราะห์สถานะและสาขางาน</h2></div><div class="grid cols2"><section class="panel"><h2>สัดส่วนงานตามสาขา</h2><p>เครื่องกล · ไฟฟ้า · ไม่ระบุ</p><div id="branchAll"></div></section><section class="panel"><h2>งานคงค้างตามสาขา</h2><p>จำนวนและสัดส่วนของงานคงค้าง</p><div id="branchPending"></div></section></div>
+<div class="section"><h2>วิเคราะห์ผลงานและแนวโน้ม</h2></div><div class="grid cols2"><section class="panel"><h2>ผลงานผู้ดำเนินงาน</h2><p>จำนวนงานที่ปิดสำเร็จ · รวมรายชื่อที่พบจากทุกเดือน</p><div id="technicians"></div></section><section class="panel"><h2>งานคงค้างตามผู้รับผิดชอบ</h2><p>เรียงจากจำนวนงานคงค้างมากไปน้อย</p><div id="pendingOwners"></div></section></div>
+<div class="section"><h2>ตัวชี้วัดเพิ่มเติม</h2></div>
+<div class="grid cols2"><section class="panel"><h2>เปรียบเทียบงานรายเดือน</h2><p>จำนวนงานและอัตราปิดงานแต่ละเดือน</p><div class="monthchart" id="trend"></div><div class="legend"><span><i class="dot" style="background:var(--green)"></i>เสร็จสิ้น</span><span><i class="dot" style="background:var(--red)"></i>คงค้าง</span></div></section><section class="panel"><h2>สัดส่วนงานเสร็จและงานคงค้าง</h2><p>เทียบกับจำนวนงานทั้งหมดในช่วงที่เลือก</p><div class="donut-layout" id="completionSplit"></div></section></div>
+<div class="section"><h2>วิเคราะห์เชิงลึก</h2></div>
+<div class="grid cols2"><section class="panel"><h2>อัตราปิดงานรายเดือน</h2><p>จำนวนงานเสร็จ / ทั้งหมด และอัตราปิดงาน</p><div id="monthlyRates"></div></section><section class="panel"><h2>งานคงค้างรายเดือน</h2><p>จำนวนและสัดส่วนงานคงค้างแต่ละเดือน</p><div id="pendingTrend"></div></section></div><div class="section"><h2>วิเคราะห์ประสิทธิภาพตามสาขา</h2></div><div class="grid"><section class="panel"><h2>อัตราปิดงานตามสาขา</h2><p>เปรียบเทียบประสิทธิภาพเครื่องกลและไฟฟ้า</p><div id="branchRates"></div></section></div>
+<div class="section"><h2>รายละเอียดสำหรับติดตาม</h2></div><div class="grid"><section class="panel"><h2>รายการงานคงค้าง</h2><p>รายการงานที่ยังไม่เสร็จ · แสดงลำดับงานก่อนเดือน</p><div class="tablewrap"><table><thead><tr><th>ลำดับ</th><th>เดือน</th><th>เลขที่งาน</th><th>เครื่องจักร</th><th>สาขา</th><th>ผู้รับผิดชอบ</th></tr></thead><tbody id="pendingRows"></tbody></table></div></section></div>
+<div class="footer">MAINTENANCE INTELLIGENCE · EXECUTIVE ANALYTICS</div>
+</main>
+<script>
+    'use strict';
+    // 01 — Month names and application state
+    const MONTHS=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+    const store={}; let targetMonth=null;
+    const $=id=>document.getElementById(id);
+    const clean=v=>String(v??'').trim();
+    const escapeHTML=v=>clean(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const fmt=n=>Number(n).toLocaleString('th-TH');
+    const pct=(a,b)=>b?`${(100*a/b).toFixed(1)}%`:'0.0%';
+    const ELECTRICIANS=['ขวัญชัย ทองหวย','ทรงศักดิ์ อ่ำอ่อน','ธวิช เปลี่ยนเพ็ง','ศุภชัย พันธุ์ใหม่'];
+    const MECHANICS=['สนั่น อุสาหะ','จักรพันธ์ วงษ์ดี','วรรณกร บ้านเนิน','สุรวัฒน์ เบญจมาส','สำเริง ยกใหญ่'];
+    const normalizeName=s=>clean(s).replace(/\s+/g,' ');
+    function technicianColor(name){const n=normalizeName(name);if(ELECTRICIANS.some(x=>normalizeName(x)===n))return 'electrical';if(MECHANICS.some(x=>normalizeName(x)===n))return 'mechanical';return 'gray'}
+    function statusColor(name){if(name==='เสร็จสิ้น'||/^completed$/i.test(name))return 'green';if(name.includes('มอบหมาย'))return 'yellow';return 'gray'}
+    const isDone=r=>r.status==='เสร็จสิ้น'||/^completed$/i.test(r.status);
+
+    // 02 — Parse and classify Excel rows
+    function getBranch(description){
+      const text=clean(description);
+      if(/(?:\[เครื่องกล\]|\(เครื่องกล\))\s*$/i.test(text))return 'เครื่องกล';
+      if(/(?:^|[\s_\-])EE\s*$/i.test(text))return 'ไฟฟ้า';
+      return 'ไม่ระบุ';
+    }
+    function detectMonth(filename){
+      const m=filename.match(/(?:^|[_\-\s])(?:2026[_\-])?(0?[1-9]|1[0-2])(?=\D|$)/);
+      return m?Number(m[1]):null;
+    }
+    function showError(message){$('alert').textContent=message;$('alert').style.display='block'}
+    function drawMonths(){
+      $('months').innerHTML=MONTHS.map((name,i)=>{const n=i+1;return `<button class="month ${store[n]?'loaded':''}" data-month="${n}"><b>${name}</b><small>${store[n]?fmt(store[n].length)+' รายการ':'เลือกไฟล์'}</small></button>`}).join('');
+      $('loadedCount').textContent=`${Object.keys(store).length} / 12 เดือน`;
+      const previous=$('period').value;
+      $('period').innerHTML='<option value="all">ภาพรวมทุกเดือน</option>'+MONTHS.map((name,i)=>`<option value="${i+1}">${name} 2569 ${store[i+1]?'✓':''}</option>`).join('');
+      $('period').value=previous;
+    }
+    async function parseFile(file,forcedMonth){
+      if(!window.XLSX)throw Error('โหลดตัวอ่าน Excel ไม่สำเร็จ กรุณาเชื่อมต่ออินเทอร์เน็ต');
+      const month=forcedMonth||detectMonth(file.name);
+      if(!month)throw Error(`ระบุเดือนไม่ได้: ${file.name} กรุณากดช่องเดือนก่อนเลือกไฟล์`);
+      const workbook=XLSX.read(await file.arrayBuffer(),{type:'array',cellDates:true});
+      const sheet=workbook.Sheets.Report||workbook.Sheets[workbook.SheetNames[0]];
+      const raw=XLSX.utils.sheet_to_json(sheet,{header:1,defval:''});
+      if(raw.length<2)throw Error(`ไม่มีข้อมูล: ${file.name}`);
+      const headers=raw[0].map(clean);
+      if(!headers[28]?.includes('ผู้ดำเนิน')||!headers[31]?.includes('สถานะ'))throw Error(`คอลัมน์ AC/AF ไม่ตรง: ${file.name}`);
+      store[month]=raw.slice(1).filter(r=>clean(r[0])||clean(r[1])).map((r,index)=>({
+        month,order:index+1,id:clean(r[1]),machine:clean(r[4]),location:clean(r[10]),
+        description:clean(r[17]),branch:getBranch(r[17]),person:clean(r[28]),
+        assigned:clean(r[27]),status:clean(r[31])||'ไม่ระบุสถานะ'
+      }));
+    }
+    async function loadFiles(files,forcedMonth){
+      $('alert').style.display='none';const errors=[];
+      for(const file of files){try{await parseFile(file,forcedMonth)}catch(e){errors.push(e.message)}}
+      if(errors.length)showError(errors.join(' | '));drawMonths();render();
+    }
+    function countBy(rows,key){const counts=new Map();rows.forEach(r=>counts.set(r[key],(counts.get(r[key])||0)+1));return counts}
+    // 03 — Reusable chart rendering
+    function renderBars(id,items,{color='blue',denominator=null,colorsByName=false,colorForName=null}={}){
+      const el=$(id);
+      if(!items.length){el.innerHTML='<div class="empty">ยังไม่มีข้อมูล</div>';return}
+      const max=Math.max(1,...items.map(x=>x[1]));
+      el.innerHTML=items.map(([name,value])=>{
+        const fraction=denominator!==null?(denominator?value/denominator:0):value/max;
+        const width=Math.max(0,Math.min(100,fraction*100));
+        const barColor=colorForName?colorForName(name):(colorsByName?(name==='เครื่องกล'?'mechanical':name==='ไฟฟ้า'?'electrical':'gray'):color);
+        return `<div class="metric-row"><div class="metric-head"><span class="metric-name" title="${escapeHTML(name)}">${escapeHTML(name)}</span><span class="metric-stat"><b>${fmt(value)}</b>${denominator!==null?`<em>${pct(value,denominator)}</em>`:''}</span></div><div class="track"><div class="fill ${barColor}" style="width:${width.toFixed(3)}%"></div></div></div>`;
+      }).join('');
+    }
+    function renderDonut(done,pending){
+      const total=done+pending,rate=total?100*done/total:0;
+      const el=$('completionSplit');
+      if(!total){el.innerHTML='<div class="empty">ยังไม่มีข้อมูล</div>';return}
+      el.innerHTML=`<div class="donut" role="img" aria-label="เสร็จสิ้น ${pct(done,total)} คงค้าง ${pct(pending,total)}" style="--donut-rate:${rate}%"><div class="donut-center"><strong>${rate.toFixed(1)}%</strong><span>อัตราปิดงาน</span></div></div><div class="donut-details"><div><span><i class="dot" style="background:var(--green)"></i>เสร็จสิ้น</span><b>${fmt(done)} งาน</b><em>${pct(done,total)}</em></div><div><span><i class="dot" style="background:var(--red)"></i>คงค้าง</span><b>${fmt(pending)} งาน</b><em>${pct(pending,total)}</em></div></div>`;
+    }
+    function renderBranchRates(items){
+      const el=$('branchRates');if(!items.some(x=>x[2])){el.innerHTML='<div class="empty">ยังไม่มีข้อมูล</div>';return}
+      el.innerHTML=items.map(([name,done,total])=>`<div class="metric-row"><div class="metric-head"><span class="metric-name">${escapeHTML(name)}</span><span class="metric-stat"><b>${fmt(done)} / ${fmt(total)}</b><em>${pct(done,total)}</em></span></div><div class="track"><div class="fill ${name==='เครื่องกล'?'mechanical':name==='ไฟฟ้า'?'electrical':'gray'}" style="width:${total?(100*done/total).toFixed(3):0}%"></div></div></div>`).join('');
+    }
+    function allKnownPeople(){
+      const names=new Set();
+      Object.values(store).flat().forEach(r=>{if(r.person)names.add(r.person)});
+      return [...names];
+    }
+    // 04 — Calculate and refresh the dashboard
+    function render(){
+      const period=$('period').value;
+      const rows=Object.values(store).flat().filter(r=>period==='all'||r.month===Number(period));
+      const done=rows.filter(isDone),pending=rows.filter(r=>!isDone(r));
+      const totals=countBy(rows,'branch'),pendingBranches=countBy(pending,'branch');
+      for(const [id,n] of Object.entries({total:rows.length,done:done.length,pending:pending.length,mechanical:totals.get('เครื่องกล')||0,electrical:totals.get('ไฟฟ้า')||0}))$(id).textContent=rows.length?fmt(n):'—';
+      $('rate').textContent=rows.length?pct(done.length,rows.length):'—';
+      renderDonut(done.length,pending.length);
+      const branchOrder=['เครื่องกล','ไฟฟ้า','ไม่ระบุ'];
+      renderBars('branchAll',rows.length?branchOrder.map(n=>[n,totals.get(n)||0]):[],{denominator:rows.length,colorsByName:true});
+      renderBars('branchPending',rows.length?branchOrder.map(n=>[n,pendingBranches.get(n)||0]):[],{denominator:pending.length,colorsByName:true});
+      const doneByPerson=countBy(done.filter(r=>r.person),'person');
+      const people=allKnownPeople().map(name=>[name,doneByPerson.get(name)||0]).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'th'));
+      renderBars('technicians',people,{denominator:done.length,colorForName:technicianColor});
+      const sortedPending=[...pending].sort((a,b)=>a.month-b.month||a.order-b.order);
+      $('pendingRows').innerHTML=sortedPending.length?sortedPending.map((r,i)=>`<tr><td>${i+1}</td><td>${String(r.month).padStart(2,'0')}</td><td>${escapeHTML(r.id)}</td><td class="wrap" title="${escapeHTML(r.location)}">${escapeHTML(r.machine||r.description||'—')}</td><td><span class="pill red">${escapeHTML(r.branch)}</span></td><td class="wrap">${escapeHTML(r.assigned||'—')}</td></tr>`).join(''):'<tr><td colspan="6" class="empty">ไม่มีงานคงค้าง หรือยังไม่อัปโหลดข้อมูล</td></tr>';
+      const monthly=MONTHS.map((name,i)=>{const rr=store[i+1]||[];const d=rr.filter(isDone).length;return {name,month:i+1,total:rr.length,done:d,pending:rr.length-d,loaded:!!store[i+1]}});
+      $('monthlyRates').innerHTML=monthly.filter(x=>x.loaded).map(x=>{const rate=x.total?100*x.done/x.total:0;
+        return `<div class="metric-row"><div class="metric-head"><span class="metric-name">${String(x.month).padStart(2,'0')} · ${escapeHTML(x.name)}</span><span class="metric-stat"><b>${fmt(x.done)} / ${fmt(x.total)} งาน</b><em>${rate.toFixed(1)}%</em></span></div><div class="track"><div class="fill green" style="width:${rate.toFixed(3)}%"></div></div></div>`}).join('')||'<div class="empty">ยังไม่มีข้อมูล</div>'; 
+      const branchRates=branchOrder.map(name=>{const rr=rows.filter(r=>r.branch===name);return [name,rr.filter(isDone).length,rr.length]});
+      renderBranchRates(branchRates);
+      const owners=[...countBy(pending.map(r=>({...r,owner:r.assigned||'ไม่ระบุผู้รับผิดชอบ'})),'owner')].sort((a,b)=>b[1]-a[1]);
+      renderBars('pendingOwners',owners,{color:'red'});
+      $('pendingTrend').innerHTML=monthly.filter(x=>x.loaded).map(x=>`<div class="metric-row"><div class="metric-head"><span class="metric-name">${escapeHTML(x.name)}</span><span class="metric-stat"><b>${fmt(x.pending)} งาน</b><em>${pct(x.pending,x.total)}</em></span></div><div class="track"><div class="fill red" style="width:${x.total?(100*x.pending/x.total).toFixed(3):0}%"></div></div></div>`).join('')||'<div class="empty">ยังไม่มีข้อมูล</div>';
+      $('trend').innerHTML=monthly.map(x=>{
+        const rate=x.total?100*x.done/x.total:0;
+        const backlog=x.total?100*x.pending/x.total:0;
+        return `<div class="monthcol ${x.loaded?'':'unloaded'}" title="${escapeHTML(x.name)}: ทั้งหมด ${fmt(x.total)} งาน, เสร็จ ${fmt(x.done)} งาน, คงค้าง ${fmt(x.pending)} งาน">
+          <div class="month-value">${x.loaded?fmt(x.total)+' งาน':'—'}</div>
+          <div class="month-rate">${x.loaded?pct(x.done,x.total):'—'}</div>
+          <div class="stack"><div class="completed" style="height:${rate.toFixed(3)}%"></div><div class="outstanding" style="height:${backlog.toFixed(3)}%"></div></div>
+          <div class="caption">${String(x.month).padStart(2,'0')}</div>
+        </div>`;
+      }).join('');
+    }
+    // 05 — User interaction handlers
+    $('months').addEventListener('click',e=>{const button=e.target.closest('[data-month]');if(!button)return;targetMonth=Number(button.dataset.month);$('single').click()});
+    $('uploadBtn').addEventListener('click',()=>$('bulk').click());
+    $('bulk').addEventListener('change',e=>{loadFiles([...e.target.files]);e.target.value=''});
+    $('single').addEventListener('change',e=>{loadFiles([...e.target.files],targetMonth);e.target.value='';targetMonth=null});
+    $('clearBtn').addEventListener('click',()=>{if(!confirm('ล้างข้อมูล Excel ที่นำเข้าทั้งหมด?'))return;Object.keys(store).forEach(key=>delete store[key]);$('period').value='all';drawMonths();render()});
+    $('period').addEventListener('change',render);
+    drawMonths();render();
   </script>
- </body>
+</body>
 </html>
