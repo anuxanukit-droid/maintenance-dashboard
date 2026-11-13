@@ -19,6 +19,21 @@
    08  Responsive layouts
    ========================================================== */
 
+/* ================================================================
+   คู่มือภาษาไทย — ส่วนที่ 1: สีหลักของเว็บไซต์
+   วิธีแก้: เปลี่ยนรหัสสี #RRGGBB หลังตัวแปรที่ต้องการ
+   --navy       = สีน้ำเงินเข้ม (หัวข้อ/ปุ่ม)
+   --blue       = สีฟ้า (จุดเน้น)
+   --bg         = สีพื้นหลังเว็บไซต์
+   --surface    = สีพื้นหลังกล่อง KPI และกราฟ
+   --text       = สีข้อความหลัก
+   --muted      = สีข้อความรอง
+   --line       = สีเส้นขอบ
+   --green      = สีงานเสร็จสิ้น
+   --red        = สีงานคงค้าง
+   --shadow     = เงากล่อง (rgba คือสีและความโปร่งใส)
+   หมายเหตุ: สีที่กำหนดเป็นรหัสตรงใน CSS บางจุด ต้องแก้ที่จุดนั้น
+   ================================================================ */
 /* 01 — Design tokens */
 :root {
   --navy: #142a48;
@@ -36,6 +51,10 @@
   --shadow: 0 16px 44px rgba(19, 44, 80, .055);
 }
 
+/* ส่วนที่ 2: โครงหน้าเว็บ / แถบเมนู / ฟอนต์
+   body font = ฟอนต์หลัก; 17px/1.5 = ขนาด/ระยะบรรทัด
+   .head padding = ระยะขอบแถบหัว; .logo font-size = ขนาดชื่อ Dashboard
+   ถ้าฟอนต์ DB Helvethaica ไม่ติดตั้งบนเครื่อง จะใช้ฟอนต์สำรอง */
 /* 02 — Global & navigation */
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -84,6 +103,10 @@ h1 { font-size: clamp(27px, 3vw, 37px); letter-spacing: -1.4px; line-height: 1.3
 h2 { font-size: 17px; letter-spacing: -.3px; margin: 0 0 5px; }
 p { margin: 0; color: var(--muted); }
 
+/* ส่วนที่ 3: ชื่อหน้า Dashboard และพื้นที่อัปโหลด Excel
+   .hero = แถวชื่อ Dashboard; .upload = กล่องพื้นน้ำเงินสำหรับนำเข้าไฟล์
+   .upload background = สีไล่ระดับของกล่องอัปโหลด
+   .btn.primary = สีปุ่มหลัก; .filter = ความกว้างช่องเลือกเดือน */
 /* 03 — Hero and controls */
 .hero { display: flex; justify-content: space-between; align-items: end; gap: 20px; flex-wrap: wrap; margin-bottom: 26px; }
 .hero p { font-size: 14px; }
@@ -133,6 +156,10 @@ select:focus, textarea:focus { outline: 3px solid #426ce22b; border-color: var(-
 .upload .actions { display: flex; flex-wrap: wrap; gap: 10px; }
 .upload .actions .btn:first-child { background: white; color: #14335b; border-color: white; }
 
+/* ส่วนที่ 4: ปุ่มเลือกเดือน มกราคม–ธันวาคม
+   .monthgrid = จำนวนคอลัมน์ (12 = 12 เดือนต่อแถวบนจอใหญ่)
+   .month = ขนาด/พื้นหลังปุ่มเดือน
+   .month.loaded = สีปุ่มเดือนที่อัปโหลดข้อมูลแล้ว */
 /* 04 — Month selector */
 .monthgrid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 9px; margin: 17px 0 29px; }
 .month {
@@ -150,6 +177,14 @@ select:focus, textarea:focus { outline: 3px solid #426ce22b; border-color: var(-
 .month.loaded b, .month.loaded small { color: #16886e; }
 .month:focus-visible { outline: 3px solid #426ce255; }
 
+/* ส่วนที่ 5: KPI ทั้ง 6 ช่อง (เรียงซ้ายไปขวา)
+   1 งานทั้งหมด | 2 เสร็จสิ้น | 3 คงค้าง
+   4 อัตราปิดงาน | 5 เครื่องกล | 6 ไฟฟ้า
+   .kpis grid-template-columns = จำนวนช่องต่อแถว
+   .card background ใช้ --surface จากส่วนที่ 1
+   .card strong = ขนาดตัวเลขใหญ่ (font-size)
+   .card::before = แถบสีด้านบนของการ์ด (height = ความหนา)
+   หากต้องการเปลี่ยนสีเฉพาะแต่ละช่อง ให้แก้ส่วน 'สี KPI แบบแยกช่อง' ด้านล่าง */
 /* 05 — KPI cards */
 .kpis { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
 .card, .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 19px; box-shadow: var(--shadow); }
@@ -173,6 +208,10 @@ select:focus, textarea:focus { outline: 3px solid #426ce22b; border-color: var(-
 .card.red strong { color: #cf5967; }
 .card.blue strong { color: #355fca; }
 
+/* ส่วนที่ 6: กล่องกราฟและหัวข้อ
+   .section = หัวข้อแบ่งหมวด
+   .cols2 = กราฟ 2 กล่องต่อแถว; .cols3 = 3 กล่องต่อแถว
+   .panel padding = ระยะห่างภายในกล่องกราฟ */
 /* 06 — Analytics panels */
 .section { display: flex; align-items: center; justify-content: space-between; margin: 37px 0 15px; }
 .section h2 { font-size: 18px; color: #1b304e; font-weight: 850; }
@@ -184,6 +223,11 @@ select:focus, textarea:focus { outline: 3px solid #426ce22b; border-color: var(-
 .panel h2 { color: #1c3453; font-weight: 850; }
 .panel > p { font-size: 12px; margin-bottom: 22px; }
 
+/* ส่วนที่ 7: กราฟแท่งและตาราง
+   .track = พื้นหลังรางกราฟ; .fill = สีแท่งกราฟ
+   .stack = แท่งเปรียบเทียบงานรายเดือน
+   .tablewrap = พื้นที่ตารางงานคงค้าง (max-height = ความสูงสูงสุด)
+   th/td = หัวตาราง/ข้อมูลในตาราง */
 /* 07 — Charts & tables */
 .barrow { display: grid; grid-template-columns: minmax(100px, 1fr) minmax(75px, 1.6fr) minmax(76px, auto); align-items: center; gap: 12px; margin: 15px 0; font-size: 12px; }
 .barrow .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #435875; font-weight: 650; }
@@ -220,6 +264,11 @@ textarea { width: 100%; min-height: 90px; padding: 11px; border: 1px solid #dce4
 .alert { display: none; padding: 13px 16px; border-radius: 11px; margin: 13px 0; background: #fff0f1; color: #b04454; }
 .footer { text-align: center; color: #9aa9bc; font-size: 11px; margin-top: 35px; letter-spacing: .6px; }
 
+/* ส่วนที่ 8: การปรับขนาดตัวอักษรและกราฟเพิ่มเติม
+   --font-xs/sm/md/lg = ขนาดอักษรเล็กไปใหญ่
+   ข้อควรระวัง: CSS ที่อยู่ด้านล่างจะมีผลทับค่าบางส่วนด้านบน
+   .track height = ความหนาของกราฟแนวนอน
+   .stack height = ความสูงของกราฟรายเดือน */
 /* 08 — Executive chart refinements */
 :root { --font-xs: 12px; --font-sm: 13px; --font-md: 14px; --font-lg: 18px; }
 body { font-size: var(--font-md); line-height: 1.6; }
@@ -249,6 +298,11 @@ body { font-size: var(--font-md); line-height: 1.6; }
 .monthcol .caption { font-size: var(--font-sm); }
 @media(max-width: 560px) { .metric-stat { gap: 7px; } .monthchart { overflow-x: auto; grid-template-columns: repeat(12,minmax(39px,1fr)); } .month-value { font-size: 10px; } .month-rate { font-size: 11px; } .monthcol .caption { font-size: 12px; } }
 
+/* ส่วนที่ 9: หน้าจอมือถือและแท็บเล็ต
+   @media (max-width:1250px) = จอขนาดกลาง
+   @media (max-width:850px)  = แท็บเล็ต
+   @media (max-width:560px)  = มือถือ
+   เปลี่ยน grid-template-columns เพื่อกำหนดจำนวนการ์ดต่อแถว */
 /* 09 — Responsive layouts */
 @media (max-width: 1250px) {
   .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -277,6 +331,13 @@ body { font-size: var(--font-md); line-height: 1.6; }
 }
 
 
+/* ส่วนที่ 10: สีสาขาช่างและกราฟวงแหวน
+   --mechanical = เครื่องกล (น้ำเงิน)
+   --electrical = ไฟฟ้า (ส้ม)
+   --other      = ไม่ระบุสาขา (เทา)
+   .donut width/height = ขนาดวงแหวน
+   .donut-center = วงกลมขาวตรงกลาง
+   เปลี่ยนสีนี้จะส่งผลต่อกราฟสาขาช่าง ไม่ใช่การคำนวณ */
 /* 10 — Refined typography, consistent branch colors, and donut */
 :root { --mechanical:#3475db; --electrical:#f19a38; --other:#9aa9bc; }
 body { font-family:'DB Helvethaica X 67 MedCond','DB Helvethaica X','Segoe UI',Tahoma,sans-serif; }
@@ -311,20 +372,46 @@ body { font-family:'DB Helvethaica X 67 MedCond','DB Helvethaica X','Segoe UI',T
 @media(max-width:1400px){ .monthgrid { grid-template-columns:repeat(6,minmax(0,1fr)); } }
 @media(max-width:600px){ .monthgrid { grid-template-columns:repeat(3,minmax(0,1fr)); } .month b { font-size:14px; } .donut { width:164px;height:164px; } .donut-center { width:118px;height:118px; } }
 
+
+/* ================================================================
+   จุดแก้สี KPI แบบแยกช่อง (แก้รหัส # ได้ทันที)
+   nth-child(1) = งานทั้งหมด
+   nth-child(2) = งานเสร็จสิ้น
+   nth-child(3) = งานคงค้าง
+   nth-child(4) = อัตราปิดงาน
+   nth-child(5) = งานเครื่องกล
+   nth-child(6) = งานไฟฟ้า
+   strong = สีตัวเลขใหญ่; ::before = สีเส้นด้านบน
+   ================================================================ */
+.kpis .card:nth-child(1) strong { color:#142a48; }
+.kpis .card:nth-child(2) strong { color:#0b9479; }
+.kpis .card:nth-child(3) strong { color:#cf5967; }
+.kpis .card:nth-child(4) strong { color:#355fca; }
+.kpis .card:nth-child(5) strong { color:#3475db; }
+.kpis .card:nth-child(6) strong { color:#f19a38; }
+.kpis .card:nth-child(1)::before { background:#b8c6d9; }
+.kpis .card:nth-child(2)::before { background:var(--green); }
+.kpis .card:nth-child(3)::before { background:var(--red); }
+.kpis .card:nth-child(4)::before { background:var(--blue); }
+.kpis .card:nth-child(5)::before { background:var(--mechanical); }
+.kpis .card:nth-child(6)::before { background:var(--electrical); }
+
   </style>
 </head>
 <body>
+<!-- โลโก้ CPF: เปลี่ยนชื่อไฟล์ใน src ให้ตรงกับชื่อรูปที่อยู่ใน GitHub; width/height กำหนดพื้นที่โลโก้; translateY(-8px) ขยับภาพขึ้น 8 พิกเซล -->
 <header><div class="head"><div class="logo"><span class="mark" style="width:150px;height:54px;padding:0;background:transparent;box-shadow:none;overflow:hidden;">
-  <img src="CP ร้อยเรียงความดี.png"
-       alt="CPF Logo"
-       style="width:100%;height:100%;object-fit:contain;display:block;transform:translateY(-8px);">
-</span>
+  <img src="CP ร้อยเรียงความดี.png" alt="CPF Logo" style="width:100%;height:100%;object-fit:contain;display:block;transform:translateY(-8px);">
 </span><span>MAINTENANCE <span style="font-weight:400;color:#90a1b8">/ Intelligence</span></span></div><div class="muted small">Engineering Department</div></div></header>
 <main>
 <div class="hero"><div><div class="tag">EXECUTIVE OVERVIEW</div><h1>Maintenance Performance <span style="color:var(--blue)">Dashboard</span></h1><p>ภาพรวมงานซ่อมบำรุง · ผลงานทีมช่าง · ติดตามงานคงค้าง</p></div><select class="filter" id="period"><option value="all">ภาพรวมทุกเดือน</option></select></div>
+<!-- ส่วนอัปโหลด: รองรับไฟล์ Excel .xlsx/.xls; เลือกได้หลายไฟล์; ปุ่มล้างข้อมูลจะล้างข้อมูลในหน้านี้ -->
 <section class="upload"><div><h2>นำเข้าข้อมูล Excel รายเดือน <span id="loadedCount" style="font-size:12px;color:#a7c6ed;margin-left:8px">0 / 12 เดือน</span></h2><p>เลือกไฟล์ PM_2026_01–12.xlsx หรือคลิกเดือนด้านล่าง</p></div><div class="actions"><button class="btn" id="uploadBtn">＋ อัปโหลด Excel</button><button class="btn ghost" id="clearBtn">ล้างข้อมูล</button></div><input accept=".xlsx,.xls" hidden="" id="bulk" multiple="" type="file"/><input accept=".xlsx,.xls" hidden="" id="single" type="file"/></section>
+<!-- ปุ่มเดือนถูกสร้างด้วย JavaScript อัตโนมัติ ไม่ต้องพิมพ์ชื่อเดือนใน HTML -->
 <div class="monthgrid" id="months"></div><div class="alert" id="alert"></div>
+<!-- ส่วน KPI: id=total/done/pending/rate/mechanical/electrical เชื่อมกับ JavaScript; ห้ามเปลี่ยน id หากไม่แก้ JS ด้วย -->
 <section class="kpis"><div class="card"><div class="label">งานทั้งหมด</div><strong id="total">—</strong><small>ใบงานที่นำเข้า</small></div><div class="card green"><div class="label">งานเสร็จสิ้น</div><strong id="done">—</strong><small>ปิดงานแล้ว</small></div><div class="card red"><div class="label">งานคงค้าง</div><strong id="pending">—</strong><small>ยังไม่เสร็จสิ้น</small></div><div class="card blue"><div class="label">อัตราปิดงาน</div><strong id="rate">—</strong><small>งานเสร็จ / งานทั้งหมด</small></div><div class="card"><div class="label">งานเครื่องกล</div><strong id="mechanical">—</strong><small>จำแนกจากรายละเอียดงาน</small></div><div class="card"><div class="label">งานไฟฟ้า</div><strong id="electrical">—</strong><small>จำแนกจากรายละเอียดงาน</small></div></section>
+<!-- ส่วนกราฟ: ชื่อ id ของแต่ละกราฟเชื่อมกับ JavaScript; เปลี่ยนข้อความหัวข้อได้ แต่ไม่ควรเปลี่ยน id -->
 <div class="section"><h2>วิเคราะห์สถานะและสาขางาน</h2></div><div class="grid cols2"><section class="panel"><h2>สัดส่วนงานตามสาขา</h2><p>เครื่องกล · ไฟฟ้า · ไม่ระบุ</p><div id="branchAll"></div></section><section class="panel"><h2>งานคงค้างตามสาขา</h2><p>จำนวนและสัดส่วนของงานคงค้าง</p><div id="branchPending"></div></section></div>
 <div class="section"><h2>วิเคราะห์ผลงานและแนวโน้ม</h2></div><div class="grid cols2"><section class="panel"><h2>ผลงานผู้ดำเนินงาน</h2><p>จำนวนงานที่ปิดสำเร็จ · รวมรายชื่อที่พบจากทุกเดือน</p><div id="technicians"></div></section><section class="panel"><h2>งานคงค้างตามผู้รับผิดชอบ</h2><p>เรียงจากจำนวนงานคงค้างมากไปน้อย</p><div id="pendingOwners"></div></section></div>
 <div class="section"><h2>ตัวชี้วัดเพิ่มเติม</h2></div>
@@ -336,7 +423,15 @@ body { font-family:'DB Helvethaica X 67 MedCond','DB Helvethaica X','Segoe UI',T
 </main>
 <script>
     'use strict';
+    // ส่วนที่ 11: ชื่อเดือนและตัวแปรเก็บข้อมูล
+    // MONTHS = ชื่อเดือน 12 เดือน; store = ข้อมูล Excel ที่โหลดไว้ในหน้านี้
+    // targetMonth = เดือนที่เลือกก่อนอัปโหลด; $ = ตัวช่วยค้นหา HTML ตาม id
+    // fmt = แสดงตัวเลขมีคอมมา; pct = คำนวณร้อยละ (ตัวตั้ง / ตัวหาร × 100)
+    // ELECTRICIANS = รายชื่อช่างไฟฟ้า (กราฟสีส้ม)
+    // MECHANICS = รายชื่อช่างเครื่องกล (กราฟสีน้ำเงิน)
+    // หากแก้รายชื่อ ต้องสะกดให้ตรงกับ Excel เพื่อจับคู่สีได้
     // 01 — Month names and application state
+    // วิธีแก้ปี: ชื่อไฟล์/ตัวเลือกปีถูกกำหนดหลายจุด ตรวจทั้ง detectMonth() และ drawMonths() ก่อนเปลี่ยนปี
     const MONTHS=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
     const store={}; let targetMonth=null;
     const $=id=>document.getElementById(id);
@@ -351,6 +446,21 @@ body { font-family:'DB Helvethaica X 67 MedCond','DB Helvethaica X','Segoe UI',T
     function statusColor(name){if(name==='เสร็จสิ้น'||/^completed$/i.test(name))return 'green';if(name.includes('มอบหมาย'))return 'yellow';return 'gray'}
     const isDone=r=>r.status==='เสร็จสิ้น'||/^completed$/i.test(r.status);
 
+    // ส่วนที่ 12: อ่าน Excel และจำแนกสาขา
+    // getBranch(): คำลงท้าย (เครื่องกล) หรือ [เครื่องกล] = เครื่องกล
+    //             คำลงท้าย EE = ไฟฟ้า; นอกเหนือจากนี้ = ไม่ระบุ
+    // detectMonth(): ดึงเลขเดือนจากชื่อไฟล์ เช่น PM_2026_01.xlsx
+    // parseFile(): อ่านชีตชื่อ Report ก่อน ถ้าไม่มีใช้ชีตแรก
+    // คอลัมน์ใช้ดัชนีเริ่มจาก 0 (A=0, B=1, ...)
+    //   B  = เลขที่งาน          (r[1])
+    //   E  = เครื่องจักร        (r[4])
+    //   K  = ตำแหน่ง/สถานที่   (r[10])
+    //   R  = รายละเอียดงาน      (r[17]) ใช้จำแนกสาขา
+    //   AB = ผู้รับผิดชอบ      (r[27]) ใช้กราฟงานคงค้าง
+    //   AC = ผู้ดำเนินงาน       (r[28]) ใช้กราฟผลงานช่าง
+    //   AF = สถานะงาน         (r[31]) ใช้ตัดสินงานเสร็จ/คงค้าง
+    // ห้ามเปลี่ยนเลขดัชนีโดยไม่ตรวจรูปแบบ Excel ต้นฉบับ
+    // ข้อมูลอ่านภายในเบราว์เซอร์ ไม่ได้ส่ง Excel ขึ้น GitHub
     // 02 — Parse and classify Excel rows
     function getBranch(description){
       const text=clean(description);
@@ -392,6 +502,11 @@ body { font-family:'DB Helvethaica X 67 MedCond','DB Helvethaica X','Segoe UI',T
       if(errors.length)showError(errors.join(' | '));drawMonths();render();
     }
     function countBy(rows,key){const counts=new Map();rows.forEach(r=>counts.set(r[key],(counts.get(r[key])||0)+1));return counts}
+    // ส่วนที่ 13: วาดกราฟ
+    // renderBars = กราฟแท่งแนวนอน (สี/ความกว้าง/เปอร์เซ็นต์)
+    // renderDonut = กราฟวงแหวนเสร็จสิ้นเทียบกับคงค้าง
+    // renderBranchRates = อัตราปิดงานของแต่ละสาขา
+    // ความกว้างกราฟเป็นเปอร์เซ็นต์ของฐานที่กำหนด
     // 03 — Reusable chart rendering
     function renderBars(id,items,{color='blue',denominator=null,colorsByName=false,colorForName=null}={}){
       const el=$(id);
@@ -419,6 +534,13 @@ body { font-family:'DB Helvethaica X 67 MedCond','DB Helvethaica X','Segoe UI',T
       Object.values(store).flat().forEach(r=>{if(r.person)names.add(r.person)});
       return [...names];
     }
+    // ส่วนที่ 14: คำนวณ KPI และอัปเดตหน้าจอ
+    // งานทั้งหมด = จำนวนแถวที่อ่านได้ในช่วงเดือนที่เลือก
+    // งานเสร็จสิ้น = สถานะ 'เสร็จสิ้น' หรือ 'completed'
+    // งานคงค้าง = งานทั้งหมด - งานเสร็จสิ้น
+    // อัตราปิดงาน = งานเสร็จสิ้น / งานทั้งหมด × 100
+    // งานเครื่องกล/ไฟฟ้า = จำนวนแถวที่จำแนกสาขาได้
+    // ผลงานผู้ดำเนินงานใช้คอลัมน์ AC; งานคงค้างตามผู้รับผิดชอบใช้ AB
     // 04 — Calculate and refresh the dashboard
     function render(){
       const period=$('period').value;
@@ -465,4 +587,5 @@ body { font-family:'DB Helvethaica X 67 MedCond','DB Helvethaica X','Segoe UI',T
     drawMonths();render();
   </script>
 </body>
+<!-- วิธีใช้งาน: บันทึกไฟล์นี้เป็น index.html แล้วอัปโหลดแทนไฟล์เดิมใน GitHub; ตรวจชื่อรูปโลโก้ให้ตรงกับไฟล์ใน repo -->
 </html>
