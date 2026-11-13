@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maintenance Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f7fc;
+      color: #17345c;
+    }
+    header {
+      background: #064da8;
+      color: white;
+      padding: 24px;
+      font-size: 26px;
+      font-weight: bold;
+    }
+    main { padding: 24px; }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 22px;
+      box-shadow: 0 3px 12px #00000012;
+      border-top: 5px solid #064da8;
+    }
+    .card h3 { margin: 0 0 12px; font-size: 17px; }
+    .number { font-size: 36px; font-weight: bold; }
+    .green { border-color: #22a06b; }
+    .red { border-color: #e5484d; }
+    .orange { border-color: #f5a623; }
+    .note {
+      margin-top: 25px;
+      background: #e3efff;
+      padding: 16px;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<header>🔧 Maintenance Dashboard | PM / CM</header>
+
+<main>
+  <h2>ภาพรวมงานซ่อมบำรุง</h2>
+
+  <div class="cards">
+    <div class="card">
+      <h3>งานทั้งหมด</h3>
+      <div class="number">414</div>
+    </div>
+
+    <div class="card green">
+      <h3>งานที่เสร็จ</h3>
+      <div class="number">374</div>
+    </div>
+
+    <div class="card red">
+      <h3>งานค้าง</h3>
+      <div class="number">40</div>
+    </div>
+
+    <div class="card">
+      <h3>สาขาเครื่องกล</h3>
+      <div class="number">304</div>
+    </div>
+
+    <div class="card orange">
+      <h3>สาขาไฟฟ้า</h3>
+      <div class="number">106</div>
+    </div>
+  </div>
+
+  <div class="note">
+    📊 ข้อมูลตัวอย่างสำหรับทดสอบเว็บไซต์
+    <br>
+    ขั้นตอนถัดไปจะเชื่อมต่อ Excel จาก OneDrive
+  </div>
+</main>
+
+</body>
+</html>
